@@ -140,9 +140,27 @@ def move():
                 vector(0, 5),
                 vector(0, -5),
             ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
+        
+            #Se agrega modificación para que los fantasmas tomen la ruta que tenga la menor distancia hacia pacman
+            best = None
+            min_distance = 100000000000000000000
+
+            for option in options:
+                new_position = point + option
+                if valid(new_position):
+                    dx = pacman.x - new_position.x
+                    dy = pacman.y - new_position.y
+                    distance =(dx**2 + dy**2) ** 0.5 
+
+                    if distance < min_distance:
+                        min_distance = distance
+                        best = option
+
+            if best:
+                course.x, course.y = best.x, best.y
+                point.move(course)
+            else:
+                point.move(course)
 
         up()
         goto(point.x + 10, point.y + 10)
